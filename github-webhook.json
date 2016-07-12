@@ -1,0 +1,10 @@
+{
+  "port": 3332,
+  "path": "/",
+  "secret": "hidden in plain sight",
+  "rules": [{
+    "event": "push",
+    "match": "ref == \"refs/heads/master\" && repository.name == \"an-io-game\"",
+    "exec": "git pull && npm i && brunch build --production"
+  }]
+}
