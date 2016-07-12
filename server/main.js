@@ -1,8 +1,9 @@
-module.exports = function() {
-  const http = require('http')
-  const server = http.createServer((req, res) => res.end('Not quite set up!'))
-  const io = require('socket.io')(server)
-  server.listen(9999)
+const express = require('express')
+const app = express()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 
-  return { server, io }
-}
+app.use(express.static('public'))
+app.get('*', (req, res) => res.status(404).send('404 - did you really think that\'d work?'))
+
+module.exports = ready => server.listen(3333, ready)

@@ -1,4 +1,24 @@
-node_modules
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*.log
+*~
+*.sass-cache
 
-# Just in case
+.DS_Store
+.cache
+.project
+.settings
+.tmproj
+nbproject
+Thumbs.db
+
+node_modules/
 .env
+
+public/
