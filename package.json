@@ -1,0 +1,19 @@
+{
+  "name": "indev.io",
+  "version": "1.0.0",
+  "description": "Still in development!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indev-io/indev.io.git"
+  },
+  "author": "ATers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indev-io/indev.io/issues"
+  },
+  "homepage": "https://github.com/indev-io/indev.io#readme"
+}
