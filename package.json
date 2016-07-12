@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/indev-io/indev.io.git"
+    "url": "git+https://github.com/is-making/an-io-game.git"
   },
   "author": "ATers",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/indev-io/indev.io/issues"
+    "url": "https://github.com/is-making/an-io-game/issues"
   },
-  "homepage": "https://github.com/indev-io/indev.io#readme",
+  "homepage": "https://github.com/is-making/an-io-game#readme",
   "dependencies": {
     "socket.io": "^1.4.8"
   }
