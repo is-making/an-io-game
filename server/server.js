@@ -53,7 +53,6 @@ function hotReload() {
     if(item == process.cwd() + '/server/server.js') continue
     delete require.cache[item]
   }
-  global._io_game_requires = []
   init()
 }
 
