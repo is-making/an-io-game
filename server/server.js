@@ -8,43 +8,44 @@ console.log('==== an-io-game ====')
 console.log('loading dependencies')
 
 require('dotenv').config()
-const express = require('express')
-const app = express()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
+let port = process.env.SERVER_PORT || 3333
 
-function init() {
+const express = require('express')
+const http = require('http')
+const socketio = require('socket.io')
+let app, server, io
+
+function init(callback) {
+  app = express()
+  server = http.Server(app)
+  io = socketio(server)
+  
   // load index.js, which loads everything else
   require('./')(express, app, io)
+  
+  server.listen(port, function() {
+    console.log("listening on :" + port)
+    if(callback) callback()
+  })
 }
 
-init()
+function quit() {
+  console.log("shutting down server")
+  io.close()
+  server.close()
+}
 
-let port = process.env.SERVER_PORT || 3333
-module.exports = ready => server.listen(port, function() {
-  console.log("listening on :" + port)
-  ready()
-})
+module.exports = ready => init(ready)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Code for hot-reloading on changes
 
 /**
- * Clears express cache, then clears require cache,
- * then reloads server modules
+ * Clears require cache, shuts down server
+ * then reloads server & server modules
  */
 function hotReload() {
-  var routes = app._router.stack;
-  routes.forEach(removeMiddlewares)
-  routes.splice(0, routes.length)
-
-  function removeMiddlewares(route, i, routes) {
-    if (route.route) {
-      route.route.stack.forEach(removeMiddlewares)
-      route.route.stack.splice(i, route.route.stack.length)
-    }
-  }
-
+  quit()
   for (let item in require.cache) {
     // only clear our modules --
     // node_modules ones aren't going to change anytime soon
@@ -62,6 +63,6 @@ require('node-watch')('server/', function(filename) {
     console.log('server/server.js changed, restart server to apply')
     return
   }
-  console.log(filename, 'changed, hot loading')
+  console.log(filename, 'changed, reloading server')
   hotReload()
 })

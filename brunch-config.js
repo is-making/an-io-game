@@ -1,8 +1,8 @@
 module.exports = {
   files: {
     // 10/10 best terminology
-    javascripts: { joinTo: 'main.js' },
-    stylesheets: { joinTo: 'main.css' }
+    javascripts: { joinTo: 'index.js' },
+    stylesheets: { joinTo: 'index.css' }
   },
 
   server: {
