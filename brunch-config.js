@@ -6,9 +6,9 @@ module.exports = {
   },
 
   server: {
-    path: 'server/main.js'
+    path: 'server/server.js'
   },
-
+  
   plugins: {
     babel: { presets: ['es2015', 'stage-3'] }
   }
