@@ -21,7 +21,7 @@ function init(callback) {
   io = socketio(server)
   
   // load index.js, which loads everything else
-  require('./')(express, app, io)
+  require('./')(express, app, io, server)
   
   server.listen(port, function() {
     console.log("listening on :" + port)

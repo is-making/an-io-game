@@ -16,6 +16,8 @@ window.players = {}
 let animationFrame
 
 let currentDirection = 0
+let offsetX = 0, offsetY = 0
+
 
 function frame(){
   if(isRunning) {
@@ -29,7 +31,12 @@ function frame(){
   
   ctx.fillStyle = 'blue'
   for(let piece of window.me.state.pieces) {
-    ctx.fillRect(piece.x * 5 + canvas.width / 2, piece.y * 5 + canvas.height / 2, 5, 5)
+    ctx.fillRect((piece.x - offsetX) * 5 + canvas.width / 2, (piece.y - offsetY) * 5 + canvas.height / 2, 5, 5)
+  }
+  
+  ctx.fillStyle = 'red'
+  for(let foodItem of window.food) {
+    ctx.fillRect((foodItem.x - offsetX) * 5 + canvas.width / 2, (foodItem.y - offsetY) * 5 + canvas.height / 2, 5, 5)
   }
 }
 
@@ -45,15 +52,17 @@ socket.on('gameMe', function(data){
   window.me = data
   window.players[data.id] = data.state
   
-  
+  offsetX = data.state.pieces[0].x
+  offsetY = data.state.pieces[0].y
   
   socket.emit('gameUpdate', {direction: currentDirection})
 })
 
 socket.on('gameData', function(data){
-  for(let id in data) {
+  for(let id in data.players) {
     window.players[id] = data[id]
   }
+  window.food = data.food
 })
 
 socket.on('disconnect', function(){

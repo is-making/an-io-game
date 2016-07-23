@@ -11,9 +11,6 @@ function addClient(socket) {
     GameState.updatePlayer(this.id, data)
     
     socket.emit('gameMe', { state: GameState.players[this.id], id: this.id })
-    let obj = {}
-    obj[this.id] = GameState.players[this.id]
-    this.broadcast.emit('gameData', obj)
   })
   
   socket.on('disconnect', function() {
@@ -23,7 +20,7 @@ function addClient(socket) {
 }
 
 
-module.exports = function(express, app, io) {
+module.exports = function(express, app, io, server) {
   console.log("setting up express")
   app.use(express.static('public'))
   app.get('/sample-text', function(req, res) {
@@ -33,4 +30,14 @@ module.exports = function(express, app, io) {
 
   console.log("setting up socket.io")
   io.on('connection', addClient)
+  
+  GameState.loopHandler = function(){
+    io.sockets.emit('gameData', { players: GameState.players, food: GameState.food } )
+  }
+  
+  server.on('close', function(){
+    GameState.stopLoop()
+  })
+  GameState.init()
+  GameState.startLoop()
 }
