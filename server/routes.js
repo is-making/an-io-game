@@ -4,16 +4,16 @@ function addClient(socket) {
   console.log('somebody connected', socket.id)
   
   let state = GameState.addPlayer(socket.id)
-  socket.emit('me', {state, id: socket.id})
-  socket.emit('data', GameState.players)
+  socket.emit('gameMe', {state, id: socket.id})
+  socket.emit('gameData', GameState.players)
   
-  socket.on('update', function(data) {
+  socket.on('gameUpdate', function(data) {
     GameState.updatePlayer(this.id, data)
     
-    socket.emit('me', { state: GameState.players[this.id], id: this.id })
+    socket.emit('gameMe', { state: GameState.players[this.id], id: this.id })
     let obj = {}
     obj[this.id] = GameState.players[this.id]
-    this.broadcast.emit('data', obj)
+    this.broadcast.emit('gameData', obj)
   })
   
   socket.on('disconnect', function() {
