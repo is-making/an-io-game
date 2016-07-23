@@ -71,8 +71,8 @@ canvas.width  = window.innerWidth
 canvas.height = window.innerHeight
 
 canvas.addEventListener('mousemove', function(e){
-  let dx = e.clientX - canvas.width / 2
-  let dy = e.clientY - canvas.height / 2
+  let dx = e.pageX - this.offsetLeft  - canvas.width / 2
+  let dy = e.pageY - this.offsetTop - canvas.height / 2
   
   currentDirection = Math.atan2(dy, dx) * 180 / Math.PI
 })

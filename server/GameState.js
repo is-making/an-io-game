@@ -1,10 +1,10 @@
 const GameState = {
-  SNAKE_SPEED: 10,         // m/s
-  SNAKE_K: 1,              // N/m
+  SNAKE_SPEED: 500,         // m/s
+  SNAKE_K: 10,              // N/m
   SNAKE_PIECE_M: 1,        // kg
-  SNAKE_PIECE_FRICTION: 1, // N
-  SNAKE_OPTIMAL_CONTROL_POINT_DISTANCE: 1, // m
-
+  SNAKE_DAMPENING: 0.8,
+  SNAKE_INITIAL_SIZE: 100,
+  
   // public player data
   players: {},
   // private player data
@@ -18,7 +18,7 @@ const GameState = {
       name: "New Player"
     }
     
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < GameState.SNAKE_INITIAL_SIZE; i++){
       state.pieces.push({
         x: 0,
         y: 0
@@ -30,7 +30,7 @@ const GameState = {
       pieces: []
     }
     
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < GameState.SNAKE_INITIAL_SIZE; i++){
       _playerData.pieces.push({
         vx: 0,
         vy: 0
@@ -70,25 +70,16 @@ const GameState = {
         let dist = Math.sqrt(dx * dx + dy * dy)
         let dir = Math.atan2(dy, dx)
         let F = GameState.SNAKE_K * dist
-        if(F > 0){
-          F -= GameState.SNAKE_PIECE_FRICTION
-          if(F < 0) F = 0
-        } else {
-          F += GameState.SNAKE_PIECE_FRICTION
-          if(F > 0) F = 0
-        }
         
-        let m = GameState.SNAKE_PIECE_M / (player.pieces.length - i)
-        let a = F / m
-        _playerData.pieces[i].vx += a * Math.cos(dir) * delta
-        _playerData.pieces[i].vy += a * Math.sin(dir) * delta
+        let Fx = F * Math.cos(dir)
+        let Fy = F * Math.sin(dir)
         
-        // epic hacks to prevent oscillation out of control
-        if(dist < GameState.SNAKE_OPTIMAL_CONTROL_POINT_DISTANCE) {
-          a = 0
-          _playerData.pieces[i].vx = 0
-          _playerData.pieces[i].vy = 0
-        }
+        let m = GameState.SNAKE_PIECE_M
+        
+        _playerData.pieces[i].vx += Fx / m * delta
+        _playerData.pieces[i].vy += Fy / m * delta
+        _playerData.pieces[i].vx *= GameState.SNAKE_DAMPENING
+        _playerData.pieces[i].vy *= GameState.SNAKE_DAMPENING
       }
     }
   },
