@@ -1,8 +1,9 @@
 const GameState = {
-  PLAYER_SPEED: 10,        // m/s
+  SNAKE_SPEED: 10,         // m/s
   SNAKE_K: 1,              // N/m
   SNAKE_PIECE_M: 1,        // kg
   SNAKE_PIECE_FRICTION: 1, // N
+  SNAKE_OPTIMAL_CONTROL_POINT_DISTANCE: 1, // m
 
   // public player data
   players: {},
@@ -42,7 +43,7 @@ const GameState = {
   },
 
   getSpeedForSize: function(size) {
-    return GameState.PLAYER_SPEED / size
+    return GameState.SNAKE_SPEED / size
   },
 
   updatePlayer: function(id, data) {
@@ -77,9 +78,17 @@ const GameState = {
           if(F > 0) F = 0
         }
         
-        let a = F / GameState.SNAKE_PIECE_M
+        let m = GameState.SNAKE_PIECE_M / (player.pieces.length - i)
+        let a = F / m
         _playerData.pieces[i].vx += a * Math.cos(dir) * delta
         _playerData.pieces[i].vy += a * Math.sin(dir) * delta
+        
+        // epic hacks to prevent oscillation out of control
+        if(dist < GameState.SNAKE_OPTIMAL_CONTROL_POINT_DISTANCE) {
+          a = 0
+          _playerData.pieces[i].vx = 0
+          _playerData.pieces[i].vy = 0
+        }
       }
     }
   },
